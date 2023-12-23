@@ -1,22 +1,22 @@
-const http = require('http');
+const express = require('express');
+const dotenv = require('dotenv');
+const cors = require('cors');
 
-const PORT = 5000;
+const connectDB = require('./config/db');
 
-http
-  .createServer(function (req, res) {
-    if (req.url === '/users' && req.method === 'GET') {
-      res.write('Users');
-      res.end();
-    }
+dotenv.config();
+const port = process.env.PORT;
 
-    if (req.url === '/blog') {
-      res.write('Blog');
-      res.end();
-    }
+connectDB();
 
-    res.end();
-  })
-  .listen(PORT)
-  .on('listening', () => {
-    console.log('Listening on port ' + PORT);
-  });
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+app.get('/', (req, res) => {
+  res.send('Api is running...');
+});
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
